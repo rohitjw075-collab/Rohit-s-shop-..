@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rohit's Shop Management System</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Tailwind CSS & FontAwesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Barcode Scanner Library -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-800 antialiased font-sans flex flex-col justify-between">
+
+  <!-- Header -->
+  <header class="bg-indigo-700 text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="bg-white p-2 rounded-full text-indigo-700">
+          <i class="fa-solid me-1 fa-store text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-wide">Rohit's Shop System</h1>
+          <p class="text-xs text-indigo-200">Point of Sale & Inventory Solution</p>
+        </div>
+      </div>
+      <div id="header-clock" class="text-right text-sm text-indigo-100 font-mono hidden sm:block"></div>
+    </div>
+  </header>
+
+  <!-- Navigation Stepper -->
+  <nav class="bg-white shadow-sm border-b">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex justify-around">
+      <div id="step-btn-1" class="step-indicator active flex items-center space-x-2 text-sm font-semibold">
+        <span class="w-7 h-7 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs">1</span>
+        <span>Dashboard</span>
+      </div>
+      <div class="w-12 bg-gray-200 h-0.5 self-center"></div>
+      <div id="step-btn-2" class="step-indicator flex items-center space-x-2 text-sm font-semibold text-gray-400">
+        <span class="w-7 h-7 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center text-xs">2</span>
+        <span>Scan Items</span>
+      </div>
+      <div class="w-12 bg-gray-200 h-0.5 self-center"></div>
+      <div id="step-btn-3" class="step-indicator flex items-center space-x-2 text-sm font-semibold text-gray-400">
+        <span class="w-7 h-7 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center text-xs">3</span>
+        <span>Cart & Payment</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="max-w-4xl mx-auto w-full p-4 flex-grow">
+
+    <!-- STEP 1: DASHBOARD -->
+    <section id="step-1" class="step-content space-y-6">
+      <div class="bg-gradient-to-r from-indigo-800 to-indigo-600 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+        <div class="relative z-10">
+          <p class="text-indigo-200 text-sm">Today's Quick Overview</p>
+          <h2 class="text-3xl font-extrabold mt-1">Rohit's Digital Terminal</h2>
+          <div class="grid grid-cols-2 gap-4 mt-6">
+            <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20">
+              <span class="text-xs text-indigo-200 block">System Status</span>
+              <span class="text-lg font-bold text-green-300">Online & Ready</span>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20">
+              <span class="text-xs text-indigo-200 block">UPI Pay ID</span>
+              <span class="text-sm font-bold font-mono">8329461513@axl</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Cards (PhonePe Style) -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <button onclick="switchStep(2)" class="interactive-btn bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition text-center flex flex-col items-center justify-center border border-gray-100">
+          <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-2xl mb-2">
+            <i class="fa-solid fa-barcode"></i>
+          </div>
+          <span class="font-bold text-gray-700 text-sm">Scan Products</span>
+        </button>
+
+        <button onclick="switchStep(3)" class="interactive-btn bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition text-center flex flex-col items-center justify-center border border-gray-100">
+          <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-2xl mb-2">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </div>
+          <span class="font-bold text-gray-700 text-sm">View Cart</span>
+        </button>
+
+        <button onclick="toggleModal('sql-modal')" class="interactive-btn bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition text-center flex flex-col items-center justify-center border border-gray-100">
+          <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-2xl mb-2">
+            <i class="fa-solid fa-database"></i>
+          </div>
+          <span class="font-bold text-gray-700 text-sm">SQL Schema</span>
+        </button>
+
+        <button onclick="toggleModal('help-modal')" class="interactive-btn bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition text-center flex flex-col items-center justify-center border border-gray-100">
+          <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-2xl mb-2">
+            <i class="fa-solid fa-circle-question"></i>
+          </div>
+          <span class="font-bold text-gray-700 text-sm">Help Guide</span>
+        </button>
+      </div>
+
+      <!-- Start POS Action Button -->
+      <div class="pt-4">
+        <button onclick="switchStep(2)" class="interactive-btn w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-lg shadow-lg flex items-center justify-center space-x-2">
+          <span>Start Scanning & Billing</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 2: SCANNER -->
+    <section id="step-2" class="step-content space-y-6 hidden">
+      <div class="bg-white p-6 rounded-2xl shadow-md border">
+        <h2 class="text-lg font-bold mb-4 flex items-center text-gray-700">
+          <i class="fa-solid fa-camera me-2 text-indigo-600"></i> Live Camera Barcode Scanner
+        </h2>
+
+        <!-- Camera Container -->
+        <div class="relative bg-black rounded-xl overflow-hidden min-h-[250px] flex items-center justify-center">
+          <div id="reader" class="w-full"></div>
+        </div>
+
+        <p class="text-xs text-gray-500 mt-2 text-center">Point camera at product barcode to add automatically.</p>
+
+        <!-- Manual Input Fallback -->
+        <div class="mt-6 pt-4 border-t">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Manual Code Entry / Quick Select</label>
+          <div class="flex gap-2">
+            <input type="text" id="manual-barcode" placeholder="Enter barcode (e.g. 1001, 1002)" class="flex-grow p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+            <button onclick="addManualProduct()" class="interactive-btn px-5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700">Add</button>
+          </div>
+        </div>
+
+        <!-- Demo Catalog Shortcuts -->
+        <div class="mt-4">
+          <p class="text-xs font-semibold text-gray-500 mb-2">Sample Quick-Add Products:</p>
+          <div class="flex flex-wrap gap-2" id="demo-products"></div>
+        </div>
+      </div>
+
+      <!-- Scanned Items Count Floating Bar -->
+      <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 flex justify-between items-center">
+        <div>
+          <span class="text-sm font-semibold text-indigo-900">Current Cart Items:</span>
+          <span id="scan-cart-count" class="font-bold text-indigo-700 ml-1">0 items</span>
+        </div>
+        <button onclick="switchStep(3)" class="interactive-btn px-6 py-2 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700 flex items-center space-x-1">
+          <span>Go to Billing</span>
+          <i class="fa-solid fa-chevron-right text-xs"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 3: BILLING & PAYMENT -->
+    <section id="step-3" class="step-content space-y-6 hidden">
+      <div class="bg-white p-6 rounded-2xl shadow-md border">
+        <h2 class="text-lg font-bold mb-4 flex items-center text-gray-700">
+          <i class="fa-solid fa-list-check me-2 text-indigo-600"></i> Review Cart & Quantities
+        </h2>
+
+        <!-- Cart Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b text-xs text-gray-500 uppercase tracking-wider">
+                <th class="py-3 px-2">Item</th>
+                <th class="py-3 px-2">Price</th>
+                <th class="py-3 px-2 text-center">Qty</th>
+                <th class="py-3 px-2 text-right">Total</th>
+                <th class="py-3 px-2 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody id="cart-table-body" class="divide-y text-sm">
+              <!-- Dynamic Rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty Cart Indicator -->
+        <div id="empty-cart-msg" class="text-center py-8 text-gray-400">
+          <i class="fa-solid fa-basket-shopping text-4xl mb-2"></i>
+          <p>Your cart is empty. Scan products to add.</p>
+        </div>
+
+        <!-- Total Calculation Box -->
+        <div class="mt-6 pt-4 border-t flex justify-between items-center">
+          <span class="text-gray-600 font-semibold">Grand Total:</span>
+          <span id="cart-total-amount" class="text-2xl font-extrabold text-indigo-700">₹0.00</span>
+        </div>
+      </div>
+
+      <!-- Payment Method Selection -->
+      <div class="bg-white p-6 rounded-2xl shadow-md border">
+        <h2 class="text-lg font-bold mb-4 flex items-center text-gray-700">
+          <i class="fa-solid fa-wallet me-2 text-indigo-600"></i> Select Payment Option
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Offline / Cash Option -->
+          <div onclick="selectPaymentMethod('offline')" id="pay-opt-offline" class="payment-option border-2 border-indigo-600 bg-indigo-50/50 p-4 rounded-xl cursor-pointer flex items-center space-x-3">
+            <i class="fa-solid fa-money-bill-wave text-2xl text-green-600"></i>
+            <div>
+              <p class="font-bold text-gray-800">Cash / Offline</p>
+              <p class="text-xs text-gray-500">Direct instant receipt</p>
+            </div>
+          </div>
+
+          <!-- Online / UPI Option -->
+          <div onclick="selectPaymentMethod('online')" id="pay-opt-online" class="payment-option border-2 border-gray-200 p-4 rounded-xl cursor-pointer flex items-center space-x-3">
+            <i class="fa-solid fa-qrcode text-2xl text-indigo-600"></i>
+            <div>
+              <p class="font-bold text-gray-800">Online UPI QR</p>
+              <p class="text-xs text-gray-500">Pay to 8329461513@axl</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Online Payment Container (QR Code) -->
+        <div id="online-qr-container" class="mt-6 p-4 bg-gray-50 rounded-xl border border-dashed border-gray-300 text-center hidden">
+          <p class="text-sm font-semibold text-gray-700 mb-2">Scan QR with PhonePe / Google Pay / Paytm</p>
+          <div class="flex justify-center mb-3">
+            <img id="upi-qr-code" src="" alt="UPI QR Code" class="w-48 h-48 border p-2 bg-white rounded-lg shadow-sm">
+          </div>
+          <p class="text-xs font-mono bg-white inline-block px-3 py-1 rounded border text-gray-600">VPA: 8329461513@axl</p>
+        </div>
+
+        <!-- Complete Payment Button -->
+        <button onclick="processFinalPayment()" class="interactive-btn w-full mt-6 py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl text-lg shadow-lg flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-check-circle"></i>
+          <span id="pay-btn-label">Complete Payment & Generate Bill</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal: SQL Schema Code -->
+  <div id="sql-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl max-h-[80vh] flex flex-col">
+      <div class="flex justify-between items-center mb-4 border-b pb-2">
+        <h3 class="font-bold text-lg text-gray-800"><i class="fa-solid fa-database text-indigo-600 me-2"></i> SQL Database Schema</h3>
+        <button onclick="toggleModal('sql-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+      </div>
+      <p class="text-xs text-gray-500 mb-2">Use this database script for backend deployment (MySQL / PostgreSQL):</p>
+      <pre class="bg-gray-900 text-green-400 p-4 rounded-xl text-xs font-mono overflow-auto flex-grow" id="sql-code-block"></pre>
+      <div class="mt-4 text-right">
+        <button onclick="copySqlCode()" class="interactive-btn px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold">Copy SQL Code</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Help Guide -->
+  <div id="help-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl">
+      <div class="flex justify-between items-center mb-4 border-b pb-2">
+        <h3 class="font-bold text-lg text-gray-800"><i class="fa-solid fa-circle-info text-indigo-600 me-2"></i> How to Use</h3>
+        <button onclick="toggleModal('help-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+      </div>
+      <div class="space-y-3 text-sm text-gray-600">
+        <p><strong>Step 1: Dashboard</strong> - Provides terminal status and quick action entry.</p>
+        <p><strong>Step 2: Scan Items</strong> - Grant camera permission to scan product barcodes or pick sample barcodes.</p>
+        <p><strong>Step 3: Billing</strong> - Modify quantities, select Cash or Online UPI (`8329461513@axl`), and finalize purchase.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Printable Receipt Modal -->
+  <div id="receipt-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl text-gray-800" id="printable-receipt">
+      <!-- Dynamic Receipt Area -->
+    </div>
+  </div>
+
+  <!-- Audio Wave Synthesizer Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>

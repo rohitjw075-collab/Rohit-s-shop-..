@@ -1,0 +1,54 @@
+/* Custom Animations and FX */
+.step-indicator.active span {
+  background-color: #4f46e5;
+  color: white;
+}
+.step-indicator.active {
+  color: #4f46e5;
+}
+
+/* Audio Ripple Effect Styling */
+.ripple-fx {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple-animation 0.5s linear;
+  background-color: rgba(99, 102, 241, 0.3);
+  pointer-events: none;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.interactive-btn {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.interactive-btn:active {
+  transform: scale(0.97);
+}
+
+/* Printable Bill Styling */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #printable-receipt, #printable-receipt * {
+    visibility: visible;
+  }
+  #printable-receipt {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 15px;
+    box-shadow: none;
+  }
+}
